@@ -23,8 +23,8 @@ async function main() {
   console.log(`Last block timestamp: ${lastBlockTimestamp} (${lastBlockDate.toLocaleDateString()} ${lastBlockDate.toLocaleTimeString()})`);
 
   // create a wallet
-  // const wallet = new ethers.Wallet(process.env.PRIVATE_KEY ?? "", provider);
-  const wallet = ethers.Wallet.fromPhrase(process.env.MNEMONIC ?? "", provider);
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY ?? "", provider);
+  // const wallet = ethers.Wallet.fromPhrase(process.env.MNEMONIC ?? "", provider);
 
   console.log(`Using address ${wallet.address}`);
   const balanceBN = await provider.getBalance(wallet.address);
@@ -59,8 +59,8 @@ async function main() {
         throw new Error("toAddress not provided");
       const toAddress = parameters[2];
       const delegateTx = await ballotContract.delegate(toAddress);
-      const delegateReceipt = await delegateTx.wait();
-      console.log(`Delegate transaction completed ${delegateReceipt?.hash}`)
+      const delegateReceipt = await delegateTx.wait(5);
+      console.log(`Delegate transaction to address ${toAddress} completed ${delegateReceipt?.hash}`)
       break;
     case "read_proposals":
       for (let index = 0; index < 3; index++) {
@@ -83,7 +83,7 @@ async function main() {
   }
 }
 
-main().catch((error) => {
+main().catch(error => {
   console.error(error);
   process.exitCode = 1;
 });
