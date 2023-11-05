@@ -3,6 +3,44 @@
 - scripts/DeployWithHardhat.ts
 - scripts/InteractWithBallotContract.ts
 
+## How to run
+
+```
+npx ts-node ./scripts/InteractWithBallotContract.ts <contract-address> <operation-name> <optional-param>
+```
+
+### Valid operations
+
+#### Vote for a proposal
+```
+npx ts-node ./scripts/InteractWithBallotContract.ts <contract-address> vote <proposal-number>
+```
+
+#### Give right to vote
+```
+npx ts-node ./scripts/InteractWithBallotContract.ts <contract-address> give_right_to_vote <address>
+```
+
+#### Delegate
+```
+npx ts-node ./scripts/InteractWithBallotContract.ts <contract-address> delegate <address>
+```
+
+#### Read proposals
+```
+npx ts-node ./scripts/InteractWithBallotContract.ts <contract-address> read_proposals
+```
+
+#### Winning proposals
+```
+npx ts-node ./scripts/InteractWithBallotContract.ts <contract-address> winning_proposals
+```
+
+#### Winning proposals
+```
+npx ts-node ./scripts/InteractWithBallotContract.ts <contract-address> winner_name
+```
+
 ## Contract Deployments
 
 ### Transaction Hash: https://sepolia.etherscan.io/tx/0xe949369a5d7dbbedc781c0c2f774166132195c3f7fefb0a4cc0e9abe13bad14a
@@ -47,3 +85,26 @@ Vote for a proposal
 Proposal should receive 2 votes, since the wallet that initiate the transaction has 1 delegation
 
 ![Screenshot](screenshots/vote_check.png)
+
+## Vote for Proposal
+
+### Transaction Hash: https://sepolia.etherscan.io/tx/0x0cabb590acf7981656a7e2cf80fcf32f2f897c71eee61a98bf40d3fae55cb7b6
+
+## Reverted giving voting rights
+
+Reverted because I am not the chairman
+![Screenshot](screenshots/reverted_give_voting_right.png)
+
+## Check votes on etherscan
+
+Now the proposal has 3 votes
+
+![Screenshot](screenshots/read_proposals.png)
+
+## Check winning proposals
+
+![Screenshot](screenshots/winning_proposal.png)
+
+## Check winner name
+
+![Screenshot](screenshots/winning_proposal.png)
