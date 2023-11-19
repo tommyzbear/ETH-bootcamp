@@ -4,7 +4,7 @@ import { TokenizedBallot__factory } from "../typechain-types";
 dotenv.config();
 
 const PROPOSALS = ["WAGMI", "MOON", "BOOTCAMP"];
-const TOKEN_CONTRACT = "0x67FC0d694A9503d87BCb8fd7B79d3933C02AD155";
+const TOKEN_CONTRACT = "0x03944dCDe2742Eb652C98aD341c05f0CDFf9a08A";
 
 async function main() {
   const provider = new ethers.AlchemyProvider("sepolia", process.env.ALCHEMY_API_KEY);

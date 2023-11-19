@@ -18,7 +18,7 @@ async function main() {
   const balanceBN = await provider.getBalance(wallet.address);
   const balance = Number(ethers.formatUnits(balanceBN));
   console.log(`Wallet balance ${balance} ETH`);
-  if (balance < 0.01) {
+  if (balance < 0.001) {
     throw new Error("Not enough ether");
   }
 
@@ -34,20 +34,20 @@ async function main() {
   const balanceAT = await contract.balanceOf(wallet.address);
   console.log(`Account ${wallet.address} has ${balanceAT.toString()} decimal units of MyToken\n`);
 
-  const votes = await contract.getVotes(wallet.address);
-  console.log(`Account ${wallet.address} has ${votes.toString()} units of voting power before self delegating\n`);
+  // const votes = await contract.getVotes(wallet.address);
+  // console.log(`Account ${wallet.address} has ${votes.toString()} units of voting power before self delegating\n`);
 
-  const delegateTx = await contract.connect(wallet).delegate(wallet.address);
-  await delegateTx.wait();
-  const votesAfter = await contract.getVotes(wallet.address);
-  console.log(`Account ${wallet.address} has ${votesAfter.toString()} units of voting power after self delegating\n`);
+  // const delegateTx = await contract.connect(wallet).delegate(wallet.address);
+  // await delegateTx.wait();
+  // const votesAfter = await contract.getVotes(wallet.address);
+  // console.log(`Account ${wallet.address} has ${votesAfter.toString()} units of voting power after self delegating\n`);
 
-  const transferTx = await contract.connect(wallet).transfer(process.env.WALLET_ADDRESS_2 as string, MINT_VALUE / 2n);
-  await transferTx.wait();
-  const votes1AfterTransfer = await contract.getVotes(wallet.address);
-  console.log(`Account ${wallet.address} has ${votes1AfterTransfer.toString()} units of voting power after transferring\n`);
-  const votes2AfterTransfer = await contract.getVotes(process.env.WALLET_ADDRESS_2 as string);
-  console.log(`Account ${process.env.WALLET_ADDRESS_2} has ${votes2AfterTransfer.toString()} units of voting power after receiving a transfer\n`);
+  // const transferTx = await contract.connect(wallet).transfer(process.env.WALLET_ADDRESS_2 as string, MINT_VALUE / 2n);
+  // await transferTx.wait();
+  // const votes1AfterTransfer = await contract.getVotes(wallet.address);
+  // console.log(`Account ${wallet.address} has ${votes1AfterTransfer.toString()} units of voting power after transferring\n`);
+  // const votes2AfterTransfer = await contract.getVotes(process.env.WALLET_ADDRESS_2 as string);
+  // console.log(`Account ${process.env.WALLET_ADDRESS_2} has ${votes2AfterTransfer.toString()} units of voting power after receiving a transfer\n`);
 }
 
 main().catch(err => {

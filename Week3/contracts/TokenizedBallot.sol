@@ -10,10 +10,18 @@ contract TokenizedBallot {
         uint voteCount;
     }
 
+    struct VoteRecord {
+        address voter;
+        uint voteCount;
+        bytes32 proposal;
+        uint blockNumber;
+    }
+
     IMyToken public tokenContract;
     Proposal[] public proposals;
     uint256 public targetBlockNumber;
     mapping(address => uint256) public votedAmount; // Mapping to track how much each address has voted
+    VoteRecord[] public voteHistory;
 
     constructor(
         bytes32[] memory _proposalNames,
@@ -30,6 +38,14 @@ contract TokenizedBallot {
         }
     }
 
+    function getNumOfProposals() public view returns(uint length) {
+        return proposals.length;
+    }
+
+    function getNumOfVoteRecords() public view returns(uint length) {
+        return voteHistory.length;
+    }
+
     function vote(uint256 proposal, uint256 amount) external {
         // Get the sender's past votes
         uint256 pastVotes = tokenContract.getPastVotes(msg.sender, targetBlockNumber);
@@ -37,6 +53,7 @@ contract TokenizedBallot {
         require(votedAmount[msg.sender] + amount <= pastVotes, "Voter does not have enough voting power");
         votedAmount[msg.sender] += amount;
         proposals[proposal].voteCount += amount;
+        voteHistory.push(VoteRecord({voter: msg.sender, voteCount: amount, proposal: proposals[proposal].name, blockNumber: block.number}));
     }
 
     function winningProposal() public view returns (uint winningProposal_) {
