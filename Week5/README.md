@@ -40,3 +40,7 @@
 ### Owner fee redeem transaction
 
 ![Screenshot](screenshots/owner_redeem_fee_tx.png)
+
+### Optimization for betMany
+
+![Screenshot](screenshots/optimization_betMany.png)
