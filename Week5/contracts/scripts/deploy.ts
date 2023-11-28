@@ -14,7 +14,6 @@ async function main() {
   const lastBlockTimestamp = lastBlock?.timestamp ?? 0;
   const lastBlockDate = new Date(lastBlockTimestamp * 1000);
   console.log(`Last block timestamp: ${lastBlockTimestamp} (${lastBlockDate.toLocaleDateString()} ${lastBlockDate.toLocaleTimeString()})`);
-
   const wallet = new ethers.Wallet(process.env.PRIVATE_KEY ?? "", provider);
   console.log(`Using address ${wallet.address}`);
   const balanceBN = await provider.getBalance(wallet.address);
@@ -23,15 +22,16 @@ async function main() {
   if (balance < 0.001) {
     throw new Error("Not enough ether");
   }
-
+  console.log(TOKEN_RATIO);
   const contractFactory = new Lottery__factory(wallet);
   const contract = await contractFactory.deploy("LotteryToken", "LT4", TOKEN_RATIO, ethers.parseUnits(BET_PRICE.toFixed(18)), ethers.parseUnits(BET_FEE.toFixed(18)));
   await contract.waitForDeployment();
   const contractAddress = await contract.getAddress();
   console.log(`Lottery contract deployed at ${contractAddress}\n`);
-
   const tokenAddress = await contract.paymentToken();
   console.log(`Token address is ${tokenAddress}`);
+  console.log(ethers.encodeBytes32String("LotteryToken"));
+  console.log(ethers.encodeBytes32String("LT4"));
 }
 
 main().catch(err => {

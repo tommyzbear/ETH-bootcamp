@@ -6,13 +6,13 @@ import { useContractRead, useContractWrite } from "wagmi";
 
 export default function BettingInfo(params: { address: `0x${string}` }) {
   const { data: symbol } = useContractRead({
-    address: "0x8505f923505095792b2b954471C05527C09825D9",
+    address: "0xB7E6098f1CB1d8DdC2cD0c5454dE829Bf7271E96",
     abi: tokenJson.abi,
     functionName: "symbol",
   });
 
   const { data: prize } = useContractRead({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "prize",
     args: [params.address],
@@ -36,42 +36,40 @@ function TokenSwap(params: { symbol: string; address: `0x${string}` }) {
   const [sellAmount, setSellAmount] = useState(0);
 
   const { data: purchaseRatio } = useContractRead({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "purchaseRatio",
   });
 
   const { isLoading: buying, write: buyToken } = useContractWrite({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "purchaseTokens",
     value: buyAmount.toString() === "" ? 0n : ethers.parseUnits((buyAmount / Number(purchaseRatio)).toString()),
   });
 
-  console.log((buyAmount / Number(purchaseRatio)).toString());
-
   const { isLoading: selling, write: sellToken } = useContractWrite({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "returnTokens",
     args: [sellAmount.toString() === "" ? 0n : ethers.parseUnits(sellAmount.toString())],
   });
 
   const { write: approve } = useContractWrite({
-    address: "0x8505f923505095792b2b954471C05527C09825D9",
+    address: "0xB7E6098f1CB1d8DdC2cD0c5454dE829Bf7271E96",
     abi: tokenJson.abi,
     functionName: "approve",
     args: [
-      "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+      "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
       sellAmount.toString() === "" ? 0n : ethers.parseUnits(sellAmount.toString()),
     ],
   });
 
   const { data: allowance } = useContractRead({
-    address: "0x8505f923505095792b2b954471C05527C09825D9",
+    address: "0xB7E6098f1CB1d8DdC2cD0c5454dE829Bf7271E96",
     abi: tokenJson.abi,
     functionName: "allowance",
-    args: [params.address, "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5"],
+    args: [params.address, "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997"],
   });
 
   return (
@@ -171,39 +169,40 @@ function TokenSwap(params: { symbol: string; address: `0x${string}` }) {
 function PlaceBet(params: { symbol: string; address: `0x${string}`; prize: bigint }) {
   const [betNumber, setBetNumber] = useState(0);
   const { data: betPrice } = useContractRead({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "betPrice",
+    watch: true,
   });
 
   const { isLoading: betting, write: placeBet } = useContractWrite({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "betMany",
-    args: [betNumber.toString() === "" ? 0n : ethers.parseUnits(betNumber.toString())],
+    args: [betNumber.toString() === "" ? 0n : betNumber.toString()],
   });
 
   const { write: redeemPrize } = useContractWrite({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "prizeWithdraw",
     args: [params.prize],
   });
 
   const { data: allowance } = useContractRead({
-    address: "0x8505f923505095792b2b954471C05527C09825D9",
+    address: "0xB7E6098f1CB1d8DdC2cD0c5454dE829Bf7271E96",
     abi: tokenJson.abi,
     functionName: "allowance",
-    args: [params.address, "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5"],
+    args: [params.address, "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997"],
   });
 
   const { write: approve } = useContractWrite({
-    address: "0x8505f923505095792b2b954471C05527C09825D9",
+    address: "0xB7E6098f1CB1d8DdC2cD0c5454dE829Bf7271E96",
     abi: tokenJson.abi,
     functionName: "approve",
     args: [
-      "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
-      betNumber.toString() === "" ? 0n : ethers.parseUnits(betNumber.toFixed(0)),
+      "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
+      betNumber.toString() === "" ? 0n : ethers.parseUnits(betNumber.toString()),
     ],
   });
 
@@ -222,7 +221,7 @@ function PlaceBet(params: { symbol: string; address: `0x${string}`; prize: bigin
         <dialog id={`place_bet_modal`} className="modal">
           <div className="modal-box">
             <h3 className="font-bold text-lg">
-              {ethers.formatEther(betPrice)} {params.symbol} per bet
+              {betPrice !== null ? `${ethers.formatEther(betPrice)} ${params.symbol} per bet` : "Bet price unknown"}
             </h3>
             <input
               type="number"
@@ -239,7 +238,8 @@ function PlaceBet(params: { symbol: string; address: `0x${string}`; prize: bigin
                 <button
                   className="btn"
                   onClick={() => {
-                    if (allowance >= ethers.parseUnits(betNumber.toString())) {
+                    if (ethers.formatEther(allowance) >= betNumber) {
+                      console.log(ethers.formatEther(allowance), betNumber);
                       placeBet();
                     } else {
                       approve();

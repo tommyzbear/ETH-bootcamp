@@ -7,7 +7,7 @@ import scaffoldConfig from "~~/scaffold.config";
 
 export default function LotteryInfo(params: { address: `0x${string}` }) {
   const { data: ownerAddress } = useContractRead({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "owner",
     watch: true,
@@ -28,7 +28,7 @@ export default function LotteryInfo(params: { address: `0x${string}` }) {
 
 function TokenName() {
   const { data, isError, isLoading } = useContractRead({
-    address: "0x8505f923505095792b2b954471C05527C09825D9",
+    address: "0xB7E6098f1CB1d8DdC2cD0c5454dE829Bf7271E96",
     abi: tokenJson.abi,
     functionName: "symbol",
   });
@@ -42,7 +42,7 @@ function TokenName() {
 
 function TokenBalance(params: { address: `${string}` }) {
   const { data, isError, isLoading } = useContractRead({
-    address: "0x8505f923505095792b2b954471C05527C09825D9",
+    address: "0xB7E6098f1CB1d8DdC2cD0c5454dE829Bf7271E96",
     abi: tokenJson.abi,
     functionName: "balanceOf",
     args: [params.address],
@@ -59,7 +59,7 @@ function TokenBalance(params: { address: `${string}` }) {
 
 function Lottery(params: { address: `0x${string}`; ownerAddress: string }) {
   const provider = new ethers.AlchemyProvider("sepolia", scaffoldConfig.alchemyApiKey);
-  const lotteryAddress = "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5";
+  const lotteryAddress = "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997";
   const [closingDate, setClosingDate] = useState("");
   const [closingTime, setClosingTime] = useState("");
   const [duration, setDuration] = useState(0);
@@ -82,7 +82,7 @@ function Lottery(params: { address: `0x${string}`; ownerAddress: string }) {
     address: lotteryAddress,
     abi: lotteryJson.abi,
     functionName: "openBets",
-    args: [blockTimestamp + duration],
+    args: [Number(blockTimestamp) + Number(duration)],
   });
 
   const { isLoading: closing, write: closeLottery } = useContractWrite({
@@ -95,6 +95,7 @@ function Lottery(params: { address: `0x${string}`; ownerAddress: string }) {
 
   useEffect(() => {
     const end = new Date(Number(closingBlockTime));
+    console.log(closingBlockTime);
     setClosingDate(end.toLocaleDateString());
     setClosingTime(end.toLocaleTimeString());
   }, [closingTime]);
@@ -174,14 +175,14 @@ function Lottery(params: { address: `0x${string}`; ownerAddress: string }) {
 
 function WithdrawFee(params: { address: `0x${string}`; ownerAddress: string }) {
   const { data: fees } = useContractRead({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "ownerPool",
     watch: true,
   });
 
   const { write: withdrawFee } = useContractWrite({
-    address: "0x010ed4a2AB1206124b4aD22ED940e2F57B5642B5",
+    address: "0x58B710aA0CA08D1B42db5e7e73D7CA4CCD07A997",
     abi: lotteryJson.abi,
     functionName: "ownerWithdraw",
     args: [fees],
